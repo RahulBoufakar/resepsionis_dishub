@@ -1,12 +1,13 @@
 @extends('layouts.app')
 
-@section('title', 'Surat Masuk')
+@section('title', 'Surat Keluar')
 
 @section('content')
 <div class="container">
-    <h1 class="mb-4">Surat Masuk</h1>
+    <h1 class="mb-4">Surat Keluar</h1>
 
-    <form method="GET" action="{{ route('surat-masuk.index') }}" class="row g-3 mb-3">
+    {{-- Filter --}}
+    <form method="GET" action="{{ route('surat-keluar.index') }}" class="row g-3 mb-3">
         <div class="col-md-4">
             <input type="text" name="no_surat" value="{{ request('no_surat') }}" class="form-control" placeholder="No Surat">
         </div>
@@ -21,7 +22,7 @@
         </div>
     </form>
 
-    <a href="{{ route('surat-masuk.create') }}" class="btn btn-success mb-3">+ Tambah Surat Masuk</a>
+    <a href="{{ route('surat-keluar.create') }}" class="btn btn-success mb-3">+ Tambah Surat Keluar</a>
 
     <div class="table-responsive">
         <table class="table table-bordered align-middle">
@@ -29,7 +30,7 @@
                 <tr>
                     <th>No Surat</th>
                     <th>Tanggal Surat</th>
-                    <th>Pengirim</th>
+                    <th>Tujuan</th>
                     <th>Perihal</th>
                     <th>File</th>
                     <th>Aksi</th>
@@ -40,19 +41,19 @@
                 <tr>
                     <td>{{ $item->no_surat }}</td>
                     <td>{{ \Carbon\Carbon::parse($item->tanggal_surat)->format('d-m-Y') }}</td>
-                    <td>{{ $item->pengirim }}</td>
+                    <td>{{ $item->tujuan }}</td>
                     <td>{{ $item->perihal }}</td>
                     <td>
                         @if($item->file)
-                            <a href="{{ asset('storage/surat_masuk/' . $item->file) }}" target="_blank" class="btn btn-sm btn-info">Lihat</a>
+                            <a href="{{ asset('storage/surat_keluar/' . $item->file) }}" target="_blank" class="btn btn-sm btn-info">Lihat</a>
                         @else
                             <span class="text-muted">Tidak ada</span>
                         @endif
                     </td>
                     <td>
-                        <a href="{{ route('surat-masuk.show', $item->id) }}" class="btn btn-sm btn-primary">Detail</a>
-                        <a href="{{ route('surat-masuk.edit', $item->id) }}" class="btn btn-sm btn-warning">Edit</a>
-                        <form action="{{ route('surat-masuk.destroy', $item->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus?')">
+                        <a href="{{ route('surat-keluar.show', $item->id) }}" class="btn btn-sm btn-primary">Detail</a>
+                        <a href="{{ route('surat-keluar.edit', $item->id) }}" class="btn btn-sm btn-warning">Edit</a>
+                        <form action="{{ route('surat-keluar.destroy', $item->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus?')">
                             @csrf
                             @method('DELETE')
                             <button class="btn btn-sm btn-danger">Hapus</button>

@@ -11,23 +11,25 @@ class SuratMasukController extends Controller
 {
     public function index(Request $request)
     {
-        $year = $request->get('year', now()->year); // default tahun sekarang
+        $query = SuratMasuk::query();
 
-        $start = now()->setYear($year)->startOfYear()->format('Y-m-d');
-        $end   = now()->setYear($year)->endOfYear()->format('Y-m-d');
+        if ($request->filled('no_surat')) {
+            $query->where('no_surat', 'like', '%' . $request->no_surat . '%');
+        }
+        if ($request->filled('start_date') && $request->filled('end_date')) {
+            $query->whereBetween('tanggal_surat', [$request->start_date, $request->end_date]);
+        } elseif ($request->filled('start_date')) {
+            $query->whereDate('tanggal_surat', '>=', $request->start_date);
+        } elseif ($request->filled('end_date')) {
+            $query->whereDate('tanggal_surat', '<=', $request->end_date);
+        }
 
-        $surat = SuratMasuk::latest('tanggal_surat')
-            ->whereBetween('tanggal_surat', [$start, $end])
-            ->paginate(10);
+        $surat = $query->latest()->paginate(10)->withQueryString();
 
-        // Ambil daftar tahun unik dari data surat masuk
-        $years = SuratMasuk::selectRaw('YEAR(tanggal_surat) as year')
-            ->distinct()
-            ->orderBy('year', 'desc')
-            ->pluck('year');
-
-        return view('surat_masuk.index', compact('surat', 'years', 'year'));
+        return view('surat_masuk.index', compact('surat'));
     }
+
+
 
 
     public function create()
