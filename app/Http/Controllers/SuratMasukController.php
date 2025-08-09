@@ -24,6 +24,8 @@ class SuratMasukController extends Controller
             $query->whereDate('tanggal_surat', '<=', $request->end_date);
         }
 
+        $query->whereBetween('tanggal_surat', [now()->startOfYear(), now()->endOfYear()]);
+
         $surat = $query->latest()->paginate(10)->withQueryString();
 
         return view('surat_masuk.index', compact('surat'));

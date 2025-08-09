@@ -6,7 +6,6 @@
 <div class="row">
     <div class="col-md-8">
         <div class="card card-soft p-3">
-            <h5>Tambah Surat Masuk</h5>
             <form action="{{ route('surat-masuk.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 

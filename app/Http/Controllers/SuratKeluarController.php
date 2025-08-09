@@ -9,9 +9,12 @@ use Illuminate\Support\Facades\Storage;
 class SuratKeluarController extends Controller
 {
 
+
     public function index(Request $request)
     {
         $query = SuratKeluar::query();
+
+        
 
         if ($request->filled('no_surat')) {
             $query->where('no_surat', 'like', '%' . $request->no_surat . '%');
@@ -23,6 +26,9 @@ class SuratKeluarController extends Controller
         } elseif ($request->filled('end_date')) {
             $query->whereDate('tanggal_surat', '<=', $request->end_date);
         }
+
+        $query->whereBetween('tanggal_surat', [now()->startOfYear(), now()->endOfYear()]);
+        
 
         $surat = $query->latest()->paginate(10)->withQueryString();
 

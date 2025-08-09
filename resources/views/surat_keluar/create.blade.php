@@ -4,7 +4,6 @@
 
 @section('content')
 <div class="container">
-    <h1 class="mb-4">Tambah Surat Keluar</h1>
 
     <form action="{{ route('surat-keluar.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
@@ -15,6 +14,10 @@
         <div class="mb-3">
             <label>Tanggal Surat</label>
             <input type="date" name="tanggal_surat" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label>Penerima</label>
+            <input type="text" name="penerima" class="form-control" required>
         </div>
         <div class="mb-3">
             <label>Tujuan</label>

@@ -4,7 +4,6 @@
 
 @section('content')
 <div class="container">
-    <h1 class="mb-4">Surat Keluar</h1>
 
     {{-- Filter --}}
     <form method="GET" action="{{ route('surat-keluar.index') }}" class="row g-3 mb-3">
