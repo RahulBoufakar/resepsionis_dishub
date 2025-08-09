@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ArsipController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
@@ -20,7 +21,7 @@ use App\Http\Controllers\UserController;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->middleware('auth');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -35,6 +36,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth'])->group(function () {
     // Admin Only
     Route::middleware(['admin'])->group(function () {
+        Route::get('/admin', [AdminController::class, 'dashboard'])->name('admin.dashboard');
         Route::resource('surat-masuk', SuratMasukController::class)->except(['index', 'show']);
         Route::resource('surat-keluar', SuratKeluarController::class)->except(['index', 'show']);
         Route::resource('users', UserController::class)->except(['show', 'edit', 'update']);

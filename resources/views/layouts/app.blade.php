@@ -1,248 +1,170 @@
 {{-- resources/views/layouts/app.blade.php --}}
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<!doctype html>
+<html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>@yield('title', 'Sistem Resepsionis Surat')</title>
-
-    {{-- Bootstrap 5 --}}
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    {{-- Optional: Google Fonts --}}
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-
-    <style>
-        :root{
-            --brand: #3754d3;
-            --muted: #6c757d;
-            --card-radius: 14px;
-        }
-        html,body{ height:100%; }
-        body {
-            font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-            background: #f5f7fb;
-            color: #273043;
-        }
-
-        /* SIDEBAR */
-        .app-sidebar {
-            min-height: 100vh;
-            background: linear-gradient(180deg, rgba(55,84,211,0.06), transparent 40%);
-            border-right: 1px solid rgba(99,115,129,0.06);
-        }
-        .brand {
-            display:flex;
-            align-items:center;
-            gap:.75rem;
-            padding:1rem;
-        }
-        .brand img { width:44px; height:auto; }
-
-        .nav-link.active {
-            background: linear-gradient(90deg, rgba(55,84,211,0.12), rgba(55,84,211,0.06));
-            border-radius: 10px;
-            color: var(--brand) !important;
-            font-weight: 600;
-        }
-
-        .card-soft {
-            border-radius: var(--card-radius);
-            box-shadow: 0 8px 20px rgba(32,40,60,0.04);
-            background: #fff;
-        }
-
-        .topbar {
-            background: #ffffffcc;
-            backdrop-filter: blur(6px);
-            border-bottom: 1px solid rgba(99,115,129,0.06);
-        }
-
-        .user-avatar {
-            width:36px;
-            height:36px;
-            border-radius:50%;
-            background: #e9eefb;
-            display:inline-flex;
-            align-items:center;
-            justify-content:center;
-            color:var(--brand);
-            font-weight:700;
-        }
-
-        @media (max-width: 991.98px) {
-            .app-sidebar { display: none; }
-        }
-    </style>
-
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>@yield('title-page', 'Sistem Resepsionis Surat')</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.10.1/styles/overlayscrollbars.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    {{-- PASTIKAN PATH INI BENAR SESUAI PROYEK ANDA --}}
+    <link rel="stylesheet" href="{{ asset('dist/css/adminlte.css') }}" /> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     @stack('styles')
 </head>
-<body>
-<nav class="navbar topbar shadow-sm">
-    <div class="container-fluid">
-        <div class="d-flex align-items-center gap-3">
-            {{-- Sidebar toggle for mobile --}}
-            <button class="btn btn-outline-secondary d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSidebar" aria-controls="offcanvasSidebar">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                  <path d="M2 12.5a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 2.5 4h11a.5.5 0 0 1 0 1h-11A.5.5 0 0 1 2 4.5z"/>
-                </svg>
-            </button>
+<body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
+    <div class="app-wrapper">
+        <nav class="app-header navbar navbar-expand bg-body">
+            <div class="container-fluid">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" data-lte-toggle="sidebar" href="#" role="button">
+                            <i class="bi bi-list"></i>
+                        </a>
+                    </li>
+                </ul>
 
-            <a class="navbar-brand d-flex align-items-center gap-2" href="{{ url('/') }}">
-                <img src="{{ asset('images/logo.png') }}" alt="Logo" style="width:38px;">
-                <div class="d-none d-md-block">
-                    <div style="font-weight:700; color:var(--brand);">Sistem Resepsionis Surat</div>
-                    <small class="text-muted">Instansi Anda</small>
-                </div>
-            </a>
-        </div>
-
-        <div class="d-flex align-items-center gap-3">
-            {{-- Search (optional) --}}
-            <form class="d-none d-md-flex" action="{{ url()->current() }}" method="GET">
-                <div class="input-group">
-                    <input class="form-control" type="search" name="q" value="{{ request('q') }}" placeholder="Cari nomor / perihal..." aria-label="Search">
-                    <button class="btn btn-outline-secondary" type="submit">Cari</button>
-                </div>
-            </form>
-
-            {{-- User area --}}
-            @auth
-            <div class="d-flex align-items-center">
-                <div class="me-3 text-end d-none d-lg-block">
-                    <div style="font-weight:600">{{ auth()->user()->name }}</div>
-                    <small class="text-muted">{{ ucfirst(auth()->user()->role) }}</small>
-                </div>
-
-                <div class="dropdown">
-                    <a class="d-inline-flex align-items-center text-decoration-none" href="#" id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
-                        <div class="user-avatar">{{ strtoupper(substr(auth()->user()->name,0,1)) }}</div>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
-                        <li><a class="dropdown-item" href="{{ route('viewer.dashboard') ?? '#' }}">Dashboard</a></li>
-                        @if(auth()->user()->role === 'admin')
-                        <li><a class="dropdown-item" href="{{ route('admin.users') }}">Manajemen User</a></li>
-                        @endif
-                        <li><hr class="dropdown-divider"></li>
-                        <li>
-                            <form method="POST" action="{{ route('logout') }}" class="m-0">
+                <ul class="navbar-nav ms-auto">
+                    @auth
+                    <li class="nav-item dropdown">
+                        <a class="nav-link" data-bs-toggle="dropdown" href="#">
+                            <i class="bi bi-person-fill"></i> {{ Auth::user()->name }}
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+                             <a href="{{ route('profile.edit') ?? '#' }}" class="dropdown-item">
+                                <i class="bi bi-gear-fill me-2"></i> Profile
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <form method="POST" action="{{ route('logout') }}">
                                 @csrf
-                                <button type="submit" class="dropdown-item text-danger">Logout</button>
+                                <a href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();" class="dropdown-item">
+                                    <i class="bi bi-box-arrow-right me-2"></i> Logout
+                                </a>
+                            </form>
+                        </div>
+                    </li>
+                    @endauth
+                </ul>
+            </div>
+        </nav>
+
+        <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
+            <div class="sidebar-brand">
+                <a href="{{ auth()->check() && auth()->user()->role === 'admin' ? route('admin.dashboard') : route('viewer.dashboard') }}" class="brand-link">
+                    <img src="{{ asset('logo.jpeg') }}" alt="Logo" class="brand-image opacity-75 shadow" />
+                    <span class="brand-text fw-light">Sistem Resepsionis</span>
+                </a>
+            </div>
+
+            <div class="sidebar-wrapper">
+                <nav class="mt-2">
+                    <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="menu" data-accordion="false">
+                        {{-- Dashboard --}}
+                        <li class="nav-item">
+                            <a href="{{ auth()->check() && auth()->user()->role === 'admin' ? route('admin.dashboard') : route('viewer.dashboard') }}"
+                               class="nav-link {{ request()->routeIs('admin.dashboard') || request()->routeIs('viewer.dashboard') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-tachometer-alt"></i>
+                                <p>Dashboard</p>
+                            </a>
+                        </li>
+
+                        {{-- Surat Masuk --}}
+                        <li class="nav-item">
+                            <a href="{{ route('surat-masuk.index') }}" class="nav-link {{ request()->routeIs('surat-masuk.*') ? 'active' : '' }}">
+                                <i class="nav-icon bi bi-inbox-fill"></i>
+                                <p>Surat Masuk</p>
+                            </a>
+                        </li>
+
+                        {{-- Surat Keluar --}}
+                        <li class="nav-item">
+                            <a href="{{ route('surat-keluar.index') }}" class="nav-link {{ request()->routeIs('surat-keluar.*') ? 'active' : '' }}">
+                                <i class="nav-icon bi bi-send-fill"></i>
+                                <p>Surat Keluar</p>
+                            </a>
+                        </li>
+
+                        {{-- Arsip Surat --}}
+                        <li class="nav-item">
+                            <a href="{{ route('arsip.index') }}" class="nav-link {{ request()->routeIs('arsip.*') ? 'active' : '' }}">
+                                <i class="nav-icon bi bi-archive-fill"></i>
+                                <p>Arsip Surat</p>
+                            </a>
+                        </li>
+
+                        {{-- Manajemen User (Admin only) --}}
+                        @if(auth()->check() && auth()->user()->role === 'admin')
+                        <li class="nav-item">
+                            <a href="{{ route('admin.users') }}" class="nav-link {{ request()->routeIs('admin.users*') ? 'active' : '' }}">
+                                <i class="nav-icon bi bi-people-fill"></i>
+                                <p>Manajemen User</p>
+                            </a>
+                        </li>
+                        @endif
+
+                        {{-- Logout --}}
+                        <li class="nav-item mt-3">
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button type="submit" class="nav-link btn btn-link text-start w-100" style="color: inherit; text-decoration: none;">
+                                    <i class="nav-icon bi bi-box-arrow-right"></i>
+                                    <p class="mb-0">Logout</p>
+                                </button>
                             </form>
                         </li>
                     </ul>
-                </div>
-            </div>
-            @else
-            <div>
-                <a class="btn btn-outline-primary me-2" href="{{ route('login') }}">Masuk</a>
-            </div>
-            @endauth
-        </div>
-    </div>
-</nav>
-
-<div class="container-fluid">
-    <div class="row g-0">
-        {{-- Sidebar (desktop) --}}
-        <aside class="col-lg-2 app-sidebar py-4 d-none d-lg-block">
-            <div class="px-3">
-                <div class="brand mb-3">
-                    <img src="{{ asset('images/logo.png') }}" alt="logo">
-                    <div>
-                        <div style="font-weight:700">Instansi Anda</div>
-                        <small class="text-muted">Resepsionis</small>
-                    </div>
-                </div>
-
-                <nav class="nav flex-column">
-                    <a class="nav-link mb-1 {{ request()->routeIs('viewer.dashboard') ? 'active' : '' }}" href="{{ route('viewer.dashboard') }}">
-                        Dashboard
-                    </a>
-
-                    <a class="nav-link mb-1 {{ request()->routeIs('surat-masuk.*') ? 'active' : '' }}" href="{{ route('surat-masuk.index') }}">
-                        Surat Masuk
-                    </a>
-
-                    <a class="nav-link mb-1 {{ request()->routeIs('surat-keluar.*') ? 'active' : '' }}" href="{{ route('surat-keluar.index') }}">
-                        Surat Keluar
-                    </a>
-
-                    <a class="nav-link mb-1 {{ request()->routeIs('arsip.index') ? 'active' : '' }}" href="{{ route('arsip.index') }}">
-                        Arsip (>1 tahun)
-                    </a>
-
-                    @if(auth()->check() && auth()->user()->role === 'admin')
-                        <hr>
-                        <a class="nav-link mb-1 {{ request()->routeIs('admin.users') ? 'active' : '' }}" href="{{ route('admin.users') }}">
-                            Manajemen User
-                        </a>
-                        <a class="nav-link mb-1" href="{{ url('/admin') }}">Admin Panel</a>
-                    @endif
                 </nav>
-
-                <div class="mt-4">
-                    <small class="text-muted">© {{ date('Y') }} Instansi Anda</small>
-                </div>
             </div>
         </aside>
 
-        {{-- Offcanvas Sidebar (mobile) --}}
-        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasSidebar" aria-labelledby="offcanvasSidebarLabel">
-            <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasSidebarLabel">Menu</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-            </div>
-            <div class="offcanvas-body">
-                <div class="brand mb-3">
-                    <img src="{{ asset('images/logo.png') }}" alt="logo">
-                    <div>
-                        <div style="font-weight:700">Instansi Anda</div>
-                        <small class="text-muted">Resepsionis</small>
+        <main class="app-main">
+            <div class="app-content-header">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h3 class="mb-0">@yield('title', 'Dashboard')</h3>
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-end">
+                                <li class="breadcrumb-item"><a href="{{ auth()->check() && auth()->user()->role === 'admin' ? route('admin.dashboard') : route('viewer.dashboard') }}">Home</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">@yield('title', 'Dashboard')</li>
+                            </ol>
+                        </div>
                     </div>
                 </div>
-
-                <nav class="nav flex-column">
-                    <a class="nav-link mb-1" href="{{ route('viewer.dashboard') }}">Dashboard</a>
-                    <a class="nav-link mb-1" href="{{ route('surat-masuk.index') }}">Surat Masuk</a>
-                    <a class="nav-link mb-1" href="{{ route('surat-keluar.index') }}">Surat Keluar</a>
-                    <a class="nav-link mb-1" href="{{ route('arsip.index') }}">Arsip</a>
-                    @if(auth()->check() && auth()->user()->role === 'admin')
-                        <hr>
-                        <a class="nav-link mb-1" href="{{ route('admin.users') }}">Manajemen User</a>
-                    @endif
-                </nav>
             </div>
-        </div>
 
-        {{-- Main Content --}}
-        <main class="col-lg-10 py-4">
-            <div class="container-fluid">
-                {{-- Flash messages --}}
-                @if(session('success'))
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        {{ session('success') }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                @endif
+            <div class="app-content">
+                <div class="container-fluid">
+                    {{-- flash messages --}}
+                    @if(session('success'))
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{ session('success') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+                    @if(session('error'))
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            {{ session('error') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
 
-                @if(session('error'))
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        {{ session('error') }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                @endif
-
-                {{-- Page content from child views --}}
-                @yield('content')
+                    @yield('content')
+                </div>
             </div>
         </main>
     </div>
-</div>
 
-{{-- Bootstrap JS --}}
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-@stack('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.10.1/browser/overlayscrollbars.browser.es6.min.js"></script>
+    {{-- PASTIKAN PATH INI BENAR SESUAI PROYEK ANDA --}}
+    <script src="{{ asset('dist/js/adminlte.js') }}"></script>
+    @stack('scripts')
+    @yield('scripts')
 </body>
 </html>
