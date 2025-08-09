@@ -52,3 +52,8 @@ Route::middleware(['auth'])->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+// Hapus/disable register publik
+Route::get('/register', function () {
+    abort(404);
+})->name('register')->middleware('guest');
