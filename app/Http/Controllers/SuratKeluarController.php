@@ -11,7 +11,9 @@ class SuratKeluarController extends Controller
 
     public function index()
     {
-        $surat = SuratKeluar::latest()->paginate(10);
+        $surat = SuratKeluar::whereBetween('tanggal_surat', [now()->subYear()->format('Y-m-d'), now()->format('Y-m-d')])
+            ->latest()
+            ->paginate(10);
         return view('surat_keluar.index', compact('surat'));
     }
 
