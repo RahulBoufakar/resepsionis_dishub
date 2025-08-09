@@ -40,7 +40,24 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('surat-masuk', SuratMasukController::class)->except(['index', 'show']);
         Route::resource('surat-keluar', SuratKeluarController::class)->except(['index', 'show']);
         Route::resource('users', UserController::class)->except(['show', 'edit', 'update']);
+
+        
     });
+
+    Route::get('/preview/surat-masuk/{filename}', function($filename) {
+        $path = storage_path('app/public/surat_masuk/' . $filename);
+
+        if (!file_exists($path)) {
+            abort(404, 'File tidak ditemukan.');
+        }
+
+        return response()->file($path, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="' . $filename . '"',
+            'Access-Control-Allow-Origin' => '*'
+        ]);
+    })->name('suratMasuk.preview');
+
 
     // Viewer + Admin bisa lihat
     Route::get('surat-masuk', [SuratMasukController::class, 'index'])->name('surat-masuk.index');

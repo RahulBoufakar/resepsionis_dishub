@@ -54,7 +54,7 @@
         <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
             <div class="sidebar-brand">
                 <a href="{{ auth()->check() && auth()->user()->role === 'admin' ? route('admin.dashboard') : route('viewer.dashboard') }}" class="brand-link">
-                    <img src="{{ asset('logo.jpeg') }}" alt="Logo" class="brand-image opacity-75 shadow" />
+                    <img src="{{ asset('images/logo.jpg') }}" alt="Logo" class="brand-image opacity-75 shadow" />
                     <span class="brand-text fw-light">Sistem Resepsionis</span>
                 </a>
             </div>
@@ -98,7 +98,7 @@
                         {{-- Manajemen User (Admin only) --}}
                         @if(auth()->check() && auth()->user()->role === 'admin')
                         <li class="nav-item">
-                            <a href="{{ route('admin.users') }}" class="nav-link {{ request()->routeIs('admin.users*') ? 'active' : '' }}">
+                            <a href="{{ route('users.index') }}" class="nav-link {{ request()->routeIs('users.index*') ? 'active' : '' }}">
                                 <i class="nav-icon bi bi-people-fill"></i>
                                 <p>Manajemen User</p>
                             </a>

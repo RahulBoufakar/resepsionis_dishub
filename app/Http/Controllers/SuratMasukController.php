@@ -2,19 +2,33 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\SuratMasuk;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class SuratMasukController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $surat = SuratMasuk::whereBetween('tanggal_surat', [now()->subYear()->format('Y-m-d'), now()->format('Y-m-d')])
-            ->latest()
+        $year = $request->get('year', now()->year); // default tahun sekarang
+
+        $start = now()->setYear($year)->startOfYear()->format('Y-m-d');
+        $end   = now()->setYear($year)->endOfYear()->format('Y-m-d');
+
+        $surat = SuratMasuk::latest('tanggal_surat')
+            ->whereBetween('tanggal_surat', [$start, $end])
             ->paginate(10);
-        return view('surat_masuk.index', compact('surat'));
+
+        // Ambil daftar tahun unik dari data surat masuk
+        $years = SuratMasuk::selectRaw('YEAR(tanggal_surat) as year')
+            ->distinct()
+            ->orderBy('year', 'desc')
+            ->pluck('year');
+
+        return view('surat_masuk.index', compact('surat', 'years', 'year'));
     }
+
 
     public function create()
     {
@@ -47,7 +61,7 @@ class SuratMasukController extends Controller
 
     public function show(SuratMasuk $suratMasuk)
     {
-        return view('surat_masuk.show', compact('suratMasuk'));
+        return view('surat_masuk.show', ['surat' => $suratMasuk]);
     }
 
     public function edit(SuratMasuk $suratMasuk)
